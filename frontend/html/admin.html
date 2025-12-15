@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel | RBAC</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-box">
+  <h1>🛠️ Admin Panel</h1>
+  <p>Only users with <strong>ADMIN</strong> role can access this page.</p>
+
+  <button onclick="logout()">🚪 Logout</button>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+  protectAdmin();
+</script>
+</body>
+</html>
