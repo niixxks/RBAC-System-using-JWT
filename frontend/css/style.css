@@ -1,105 +1,443 @@
+/* =========================================
+   ROYAL GLASS THEME - CORE VARIABLES
+   ========================================= */
+:root {
+  --primary-gradient: linear-gradient(135deg, #2b0a3d, #1a0b2e);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --blur-amt: 12px;
+
+  --text-main: #ffffff;
+  --text-muted: #bdaecf;
+
+  --accent-gold: #ffd700;
+  --accent-purple: #9d50bb;
+  --accent-glow: 0 0 15px rgba(157, 80, 187, 0.5);
+
+  --btn-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
+  --btn-gold-gradient: linear-gradient(135deg, #ff9966, #ff5e62);
+
+  --font-family: 'Segoe UI', sans-serif;
+}
+
 /* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* PAGE BACKGROUND */
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a40, #4b1b4b);
+  background: var(--primary-gradient);
+  background-attachment: fixed;
+  /* Parallax-like effect */
+  font-family: var(--font-family);
+  color: var(--text-main);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* Centering logic can be overridden by specific page layouts */
 }
 
-/* CONTAINER (NO FIXED POSITION, NO OVERLAY) */
+/* =========================================
+   GLASS COMPONENTS
+   ========================================= */
+/* The main card container for auth/dashboard */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 24px;
+  padding: 40px;
+  width: 90%;
+  max-width: 1000px;
+  /* Wider for dashboards */
+  margin: 40px auto;
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass-panel.narrow {
+  max-width: 420px;
+  /* For login/denied pages */
+}
+
+/* LOGIN BOX (Legacy support / Specific override) */
+/* LOGIN BOX (Fixed: explicit styles since @extend is not valid CSS) */
+.login-box {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 24px;
+  padding: 40px;
+  width: 90%;
+  max-width: 420px;
+  /* Narrow for login */
+  margin: 0 auto;
+  /* Center in container */
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 .login-container {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
-/* LOGIN CARD */
-.login-box {
-  background: rgba(255, 255, 255, 0.95);
-  width: 360px;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-  text-align: center;
-
-  /* VERY IMPORTANT */
-  position: relative;
-  z-index: 10;
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #fff, #cecece);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* TITLE */
-.login-box h1 {
-  margin-bottom: 8px;
-  color: #222;
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* SUBTITLE */
+p,
+span,
+label {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
 .subtitle {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 20px;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
 }
 
-/* INPUT GROUP */
+/* =========================================
+   NAVIGATION (Glass Pill)
+   ========================================= */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#navBar {
+  display: inline-flex;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#navBar a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+#navBar a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================================
+   CARDS & SECTIONS
+   ========================================= */
+.dashboard-section {
+  margin-bottom: 30px;
+}
+
+.info-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 15px;
+}
+
+.status-message {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  font-family: 'Consolas', monospace;
+  font-size: 0.85rem;
+  color: #aaddff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  /* Ensure long JSON doesn't overflow */
+}
+
+/* =========================================
+   FORMS & INPUTS
+   ========================================= */
 .input-group {
+  margin-bottom: 20px;
   text-align: left;
-  margin-bottom: 15px;
 }
 
 .input-group label {
   display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #e0e0e0;
+  font-size: 0.9rem;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 14px;
-}
-
-/* INPUT FOCUS */
-.input-group input:focus {
-  border-color: #6a11cb;
-  box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
-}
-
-/* BUTTON */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  /* Semi-transparent input */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.input-group input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 15px rgba(157, 80, 187, 0.3);
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+button {
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: none;
+  font-family: inherit;
 }
 
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+.primary-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--btn-gradient);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
 }
 
-/* FOOTER */
-.footer-text {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #666;
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(106, 17, 203, 0.6);
+}
+
+/* Action button for fetch API */
+.action-btn {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+.toggle-btn {
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 10px;
+  flex: 1;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.toggle-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logout-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 50px;
+}
+
+.logout-link:hover {
+  color: white;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   ROLE SELECTOR
+   ========================================= */
+.auth-toggle {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 4px;
+  display: flex;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 20;
+}
+
+.role-selector {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.role-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 15px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.role-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+.role-card.active {
+  background: rgba(106, 17, 203, 0.3);
+  border-color: #9d50bb;
+  box-shadow: 0 0 15px rgba(157, 80, 187, 0.4);
+}
+
+.role-icon {
+  width: 32px;
+  height: 32px;
+  fill: #ffffff;
+  opacity: 0.6;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+
+.role-card.active .role-icon {
+  opacity: 1;
+  fill: #ffd700;
+  /* Gold Icon when active */
+}
+
+.role-card span {
+  font-size: 0.8rem;
+  color: white;
+  font-weight: 500;
+}
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.form-section {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.form-section.active {
+  display: block;
+}
+
+/* =========================================
+   UTILITIES / ICONS
+   ========================================= */
+/* Simple SVG Icon Class for alignment */
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  fill: currentColor;
+  margin-right: 8px;
+}
+
+/* Responsive */
+@media(max-width: 600px) {
+  .glass-panel {
+    width: 95%;
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .role-selector {
+    gap: 8px;
+  }
 }
