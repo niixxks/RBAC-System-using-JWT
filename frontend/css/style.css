@@ -414,6 +414,15 @@ button {
   display: block;
 }
 
+/* Ensure interactive elements accept pointer events when served via server */
+.login-box,
+.form-section,
+.role-card,
+.toggle-btn,
+.primary-btn {
+  pointer-events: auto;
+}
+
 /* =========================================
    UTILITIES / ICONS
    ========================================= */

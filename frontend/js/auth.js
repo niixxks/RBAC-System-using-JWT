@@ -40,7 +40,20 @@ async function registerUser() {
 
         const data = await res.json();
         if (res.ok) {
-            showStatus(statusElementId, `Registration successful! Role: ${data.role}. Please log in.`, false);
+            showStatus(statusElementId, `Registration successful! Role: ${data.role}. Redirecting to login...`, false);
+            // Prefill login form and switch to login view for easier flow
+            try {
+                const loginUserInput = document.getElementById('loginUsername');
+                const loginPassInput = document.getElementById('loginPassword');
+                const showLoginBtn = document.getElementById('showLoginBtn');
+                if (loginUserInput) loginUserInput.value = username;
+                if (loginPassInput) loginPassInput.value = '';
+                if (showLoginBtn) showLoginBtn.click();
+                // Also notify loginStatus
+                showStatus('loginStatus', 'Account created — enter password and Sign In.', false);
+            } catch (e) {
+                // ignore DOM errors silently
+            }
         } else {
             showStatus(statusElementId, data.msg || 'Registration failed.', true);
         }
