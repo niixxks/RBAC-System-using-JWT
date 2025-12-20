@@ -1,41 +1,54 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const helmet = require("helmet"); // NEW: For security headers
-const rateLimit = require("express-rate-limit"); // NEW: For brute-force protection
-const connectDB = require("./config/db");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 
 const app = express();
+app.use(express.json()); // Allows server to read JSON data
+app.use(cors()); // Allows frontend to talk to backend
 
-// 1. Connect to Database
-connectDB();
+// 1. CONNECT TO MONGODB (Replace with your local or Atlas URI)
+mongoose.connect('mongodb://127.0.0.1:27017/ems-rbac')
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.error(err));
 
-// 2. Security Middleware
-app.use(helmet()); 
-const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 5 login requests per windowMs
-    message: "Too many login attempts from this IP, please try again after 15 minutes"
-});
-app.use("/api/auth/login", loginLimiter); // Apply rate limit only to login route
+const SECRET_KEY = "super_secret_key_123"; // In production, keep this in .env file
 
-// 3. General Middleware
-app.use(cors());
-app.use(express.json());
-
-// 4. Serve Frontend Static Files
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-// 5. API Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-
-// 6. Root Route (Serve Login Page)
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/login.html"));
+// 2. REGISTER ROUTE
+app.post('/register', async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
+    // Hash the password (encrypt it)
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, password: hashedPassword, role });
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Registration failed" });
+  }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// 3. LOGIN ROUTE
+app.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Compare entered password with stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+
+    // Create the "ID Card" (Token) containing the Role
+    const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+
+    res.json({ token, role: user.role });
+  } catch (err) {
+    res.status(500).json({ error: "Login failed" });
+  }
 });
+
+app.listen(5000, () => console.log("Server running on port 5000"));
