@@ -3,29 +3,35 @@
 
 ## Overview
 
-This project implements a **Role-Based Access Control (RBAC) system** using **JSON Web Tokens (JWT)** as part of a cybersecurity mini project. The system demonstrates secure authentication and authorization mechanisms commonly used in real-world web applications.
+This project implements a **Role-Based Access Control (RBAC) system** using **JSON Web Tokens (JWT)**. The original implementation goal was a cybersecurity mini project demonstrating secure authentication and authorization patterns.
 
-The application ensures that users can only access resources permitted by their assigned roles, thereby enforcing the **principle of least privilege**.
+The current implementation uses a modern React frontend with Tailwind CSS and a Node.js/Express backend. The app enforces roles so users see only the resources they are permitted to access.
+
+---
+
+## What's New
+
+- Frontend reimplemented as a React application using Create React App / Vite and styled with Tailwind CSS.
+- Improved UI with responsive, glassmorphism-style components (example: Login page uses backdrop blur and gradients).
+- Routing handled with `react-router-dom` and protected routes implemented in the frontend to respect roles stored in JWTs.
 
 ---
 
 ## Objectives
 
-* To implement secure user authentication using JWT
-* To demonstrate role-based authorization
-* To prevent unauthorized access to protected resources
-* To understand real-world access control mechanisms used in cybersecurity
+* Implement secure user authentication using JWT
+* Demonstrate role-based authorization (Admin, Manager, User)
+* Prevent unauthorized access to protected resources
+* Showcase modern frontend tooling (React + Tailwind)
 
 ---
 
 ## Key Features
 
-* User registration and login
-* Password hashing for secure credential storage
-* JWT-based stateless authentication
-* Role-based authorization (Admin, Manager, User)
-* Protected backend routes
-* Secure access denial using HTTP status codes
+* User registration and login (passwords hashed with bcrypt)
+* JWT-based stateless authentication with expiry handling
+* Role-based authorization enforced on protected routes
+* Modern React frontend with Tailwind CSS (responsive and accessible)
 
 ---
 
@@ -33,23 +39,21 @@ The application ensures that users can only access resources permitted by their 
 
 ### Frontend
 
-* HTML5
-* CSS3
-* JavaScript
+* React
+* Tailwind CSS
+* Vite (or Create React App)
+* react-router-dom
 
 ### Backend
 
 * Node.js
 * Express.js
+* MongoDB (or any other supported DB)
 
 ### Security
 
 * JSON Web Token (JWT)
 * bcrypt (for password hashing)
-
-### Database
-
-* MongoDB
 
 ---
 
@@ -68,38 +72,10 @@ The application ensures that users can only access resources permitted by their 
 1. User logs in using valid credentials
 2. Server verifies credentials and issues a JWT
 3. JWT contains user identity and role
-4. Client sends JWT with each request
-5. Server validates token and role
-6. Access is granted or denied based on role
+4. Client stores token (localStorage) and sends it with requests
+5. Server validates token and role and returns resources or 401/403
 
 ---
-
-## Project Structure
-
-```
-rbac-jwt-project/
-│
-├── frontend/
-│   ├── login.html
-│   ├── dashboard.html
-│   ├── admin.html
-│   ├── style.css
-│   └── script.js
-│
-├── backend/
-│   ├── server.js
-│   ├── config/
-│   │   └── db.js
-│   ├── models/
-│   │   └── User.js
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   └── protectedRoutes.js
-│   ├── middleware/
-│   │   └── authMiddleware.js
-│   └── .env
-│
-└── README.md
 ```
 
 ---
@@ -108,72 +84,57 @@ rbac-jwt-project/
 
 ### Prerequisites
 
-* Node.js installed
-* MongoDB running locally or on cloud
-* Basic knowledge of REST APIs
+* Node.js (v16+ recommended)
+* A running MongoDB instance or connection string
 
-### Backend Setup
+### Backend
 
-1. Navigate to backend directory
-2. Install dependencies
+```powershell
+cd RBAC/backend
+npm install
+# create a .env with JWT_SECRET and MONGO_URI
+npm start
+```
 
-   ```
-   npm install
-   ```
-3. Create `.env` file and configure:
+### Frontend
 
-   ```
-   JWT_SECRET=your_secret_key
-   MONGO_URI=your_mongodb_connection
-   ```
-4. Start the server
+```powershell
+cd RBAC/frontend
+npm install
+npm run dev
+```
 
-   ```
-   npm start
-   ```
+If Tailwind is not initialized, run (from `frontend`):
+
+```powershell
+npx tailwindcss init -p
+```
 
 ---
 
-## Security Measures Implemented
+## Security Measures
 
 * Password hashing using bcrypt
-* JWT token expiration handling
-* Role-based access validation
+* JWT token expiration handling and validation
+* Role-based access validation on protected routes
 * Secure HTTP status responses (401, 403)
-* Stateless authentication without server-side sessions
 
 ---
 
 ## Testing
 
-* APIs tested using Postman
-* Role-based access verified for all routes
-* Invalid and expired tokens handled securely
-
----
-
-## Expected Outcomes
-
-* Secure authentication system
-* Proper role enforcement
-* Unauthorized users are restricted
-* Demonstrates real-world cybersecurity practices
+* API endpoints can be tested with Postman or curl
+* Frontend routes can be tested by running the dev server and exercising login/role flows
 
 ---
 
 ## Future Enhancements
 
 * Multi-factor authentication (MFA)
-* Token refresh mechanism
+* Token refresh mechanism and rotating refresh tokens
 * OAuth integration
 * Audit logging and monitoring
 * Attribute-Based Access Control (ABAC)
-
----
-
-## Conclusion
-
-This project successfully demonstrates the implementation of **Role-Based Access Control using JWT**, providing a secure and scalable authorization mechanism suitable for modern web applications and cybersecurity use cases.
 
 ---
 
@@ -181,3 +142,4 @@ This project successfully demonstrates the implementation of **Role-Based Access
 
 **Nitesh Kumar Singh**
 Cybersecurity Mini Project
+
